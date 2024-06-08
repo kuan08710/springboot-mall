@@ -2,11 +2,7 @@ HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
-!**/src/test/**/target/
-.idea/
-!.idea/encoding.xml
-!.idea/misc.xml
-!.idea/vcs.xml
+!**/src/test/**/target/=
 
 ### STS ###
 .apt_generated
