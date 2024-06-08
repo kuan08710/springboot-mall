@@ -3,9 +3,10 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-encoding.xml
-misc.xml
-vcs.xml
+.idea/
+!.idea/encoding.xml
+!.idea/misc.xml
+!.idea/vcs.xml
 
 ### STS ###
 .apt_generated
