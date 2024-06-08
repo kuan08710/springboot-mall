@@ -8,4 +8,6 @@ public class ProductQueryParams {
 
     ProductCategory category;
     String search;
+    String orderBy;
+    String sort;
 }
