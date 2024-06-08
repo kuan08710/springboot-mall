@@ -1,7 +1,7 @@
 package com.louis.springbootmall.dao.impl;
 
-import com.louis.springbootmall.constant.ProductCategory;
 import com.louis.springbootmall.dao.ProductDao;
+import com.louis.springbootmall.dto.ProductQueryParams;
 import com.louis.springbootmall.dto.ProductRequest;
 import com.louis.springbootmall.model.Product;
 import com.louis.springbootmall.rowmapper.ProductRowMapper;
@@ -24,19 +24,19 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts (ProductCategory category , String search) {
+    public List<Product> getProducts (ProductQueryParams productQueryParams) {
         String sql = " SELECT product_id, product_name, category, image_url, price " +
                      " , stock, description, created_date, last_modified_date FROM product WHERE 1 = 1 ";
 
         Map<String, Object> map = new HashMap<>();
-        if (category != null) {
+        if (productQueryParams.getCategory() != null) {
             sql += " AND category = :category ";
-            map.put("category" , category.name());
+            map.put("category" , productQueryParams.getCategory().name());
         }
 
-        if (search != null) {
+        if (productQueryParams.getSearch() != null) {
             sql += " AND product_name LIKE :search ";
-            map.put("search" , "%" + search + "%");
+            map.put("search" , "%" + productQueryParams.getSearch() + "%");
         }
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql , map , new ProductRowMapper());
@@ -69,8 +69,7 @@ public class ProductDaoImpl implements ProductDao {
                      " ) ";
         Map<String, Object> map = new HashMap<>();
         map.put("prductName" , productRequest.getProductName());
-        map.put("category" , productRequest.getCategory()
-                                           .toString());
+        map.put("category" , productRequest.getCategory().toString());
         map.put("imageUrl" , productRequest.getImageUrl());
         map.put("price" , productRequest.getPrice());
         map.put("stock" , productRequest.getStock());
@@ -84,8 +83,7 @@ public class ProductDaoImpl implements ProductDao {
 
         namedParameterJdbcTemplate.update(sql , new MapSqlParameterSource(map) , keyHolder);
 
-        int productId = keyHolder.getKey()
-                                 .intValue();
+        int productId = keyHolder.getKey().intValue();
         return productId;
     }
 
@@ -98,8 +96,7 @@ public class ProductDaoImpl implements ProductDao {
         Map<String, Object> map = new HashMap<>();
         map.put("productId" , productId);
         map.put("prductName" , productRequest.getProductName());
-        map.put("category" , productRequest.getCategory()
-                                           .toString());
+        map.put("category" , productRequest.getCategory().toString());
         map.put("imageUrl" , productRequest.getImageUrl());
         map.put("price" , productRequest.getPrice());
         map.put("stock" , productRequest.getStock());
