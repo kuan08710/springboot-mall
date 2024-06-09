@@ -82,7 +82,7 @@ public class ProductDaoImpl implements ProductDao {
         String sql = " INSERT INTO product ( " + " product_name, category, image_url, price, stock  " +
                      " , description, created_date, last_modified_date " + " ) VALUES ( " +
                      " :prductName, :category, :imageUrl, :price, :stock " +
-                     ", :description, :createData, :lastModifiedDate " + " ) ";
+                     ", :description, :createdDate, :lastModifiedDate " + " ) ";
         Map<String, Object> map = new HashMap<>();
         map.put("prductName" , productRequest.getProductName());
         map.put("category" , productRequest.getCategory().toString());
@@ -92,7 +92,7 @@ public class ProductDaoImpl implements ProductDao {
         map.put("description" , productRequest.getDescription());
 
         Date now = new Date();
-        map.put("createData" , now);
+        map.put("createdDate" , now);
         map.put("lastModifiedDate" , now);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
