@@ -3,6 +3,7 @@ package com.louis.springbootmall.model;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class Order {
@@ -11,4 +12,6 @@ public class Order {
     private Integer totalAmout;
     private Date createdDate;
     private Date lastModifiedDate;
+
+    private List<OrderItem> orderItemList;
 }

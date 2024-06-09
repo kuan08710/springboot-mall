@@ -6,6 +6,7 @@ import com.louis.springbootmall.dto.BuyItem;
 import com.louis.springbootmall.dto.CreateOrderRequest;
 import com.louis.springbootmall.model.OrderItem;
 import com.louis.springbootmall.model.Product;
+import com.louis.springbootmall.model.Order;
 import com.louis.springbootmall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -49,8 +50,20 @@ public class OrderServiceImpl implements OrderService {
         // 創建訂單
         Integer orderId = orderDao.createOrder(userId, totalAmout);
 
-        orderDao.createOrderItems(userId, orderItemList);
+        orderDao.createOrderItems(orderId, orderItemList);
 
         return orderId;
+    }
+
+    @Override
+    public Order getOrderById (Integer orderId) {
+
+        Order order = orderDao.getOrderById(orderId);
+
+        List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(orderId);
+
+        order.setOrderItemList(orderItemList);
+
+        return order;
     }
 }
