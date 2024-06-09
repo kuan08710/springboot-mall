@@ -8,7 +8,7 @@
 - 通過Spring Boot構建RESTful API
 - 使用H2資料庫進行單元測試
 
-此項目涵蓋了基本的商品管理、帳號管理和訂單管理功能，並提供了完整的CRUD（創建、讀取、更新、刪除）操作。
+此項目涵蓋了基本的商品管理、帳號管理和訂單管理功能，並提供了完整的CRUD（創建、讀取、更新、刪除）操作
 
 ### 功能描述
 
@@ -93,6 +93,10 @@
 │       │   ├── ProductControllerTest.java
 │       │   └── UserControllerTest.java
 │       └── SpringbootMallApplicationTests.java
+├── src/test/resources
+│   ├── application.properties
+│   ├── schema.sql
+│   └── data.sql
 ├── .gitignore
 ├── pom.xml
 └── README.md
