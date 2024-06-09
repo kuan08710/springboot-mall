@@ -1,6 +1,7 @@
 package com.louis.springbootmall.dao.impl;
 
 import com.louis.springbootmall.dao.OrderDao;
+import com.louis.springbootmall.dto.OrderQueryParams;
 import com.louis.springbootmall.model.Order;
 import com.louis.springbootmall.model.OrderItem;
 import com.louis.springbootmall.rowmapper.OrderItemRowMapper;
@@ -22,6 +23,42 @@ public class OrderDaoImpl implements OrderDao {
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Override
+    public List<Order> getOrders (OrderQueryParams orderQueryParams) {
+        String sql = " SELECT order_id, user_id, total_amount, created_date, last_modified_date FROM `order` WHERE 1 = 1 ";
+
+        Map<String, Object> map = new HashMap<>();
+
+        // 查詢條件
+        sql = addFilteringSql(sql , map , orderQueryParams);
+
+        // 排序 - 預設最新日期
+        sql += " ORDER BY created_date DESC ";
+
+        // 分頁
+        sql += " LIMIT :limit OFFSET :offset ";
+        map.put("limit" , orderQueryParams.getLimit());
+        map.put("offset" , orderQueryParams.getOffset());
+
+        List<Order> orderList = namedParameterJdbcTemplate.query(sql , map , new OrderRowMapper());
+
+        return orderList;
+    }
+
+    @Override
+    public Integer countOrder (OrderQueryParams orderQueryParams) {
+        String sql = " SELECT count(*) FROM `order` WHERE 1 = 1 ";
+
+        Map<String, Object> map = new HashMap<>();
+
+        // 查詢條件
+        sql = addFilteringSql(sql , map , orderQueryParams);
+
+        Integer total = namedParameterJdbcTemplate.queryForObject(sql , map , Integer.class);
+
+        return total;
+    }
 
     @Override
     public Integer createOrder (Integer userId , Integer totalAmount) {
@@ -100,12 +137,11 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<OrderItem> getOrderItemsByOrderId(Integer orderId) {
-        String sql = " SELECT oi.order_item_id, oi.order_id, oi.product_id, oi.quantity, oi.amount, p.product_name, p.image_url "
-                     + " FROM order_item oi "
-                     + " LEFT JOIN product as p "
-                     + " ON oi.product_id = p.product_id "
-                     + " WHERE oi.order_id = :orderId ";
+    public List<OrderItem> getOrderItemsByOrderId (Integer orderId) {
+        String sql =
+                " SELECT oi.order_item_id, oi.order_id, oi.product_id, oi.quantity, oi.amount, p.product_name, p.image_url " +
+                " FROM order_item oi " + " LEFT JOIN product as p " + " ON oi.product_id = p.product_id " +
+                " WHERE oi.order_id = :orderId ";
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderId" , orderId);
@@ -113,5 +149,13 @@ public class OrderDaoImpl implements OrderDao {
         List<OrderItem> orderList = namedParameterJdbcTemplate.query(sql , map , new OrderItemRowMapper());
 
         return orderList;
+    }
+
+    private String addFilteringSql (String sql , Map<String, Object> map , OrderQueryParams orderQueryParams) {
+        if (orderQueryParams.getUserId() != null) {
+            sql += " AND user_id = :userId ";
+            map.put("userId" , orderQueryParams.getUserId());
+        }
+        return sql;
     }
 }
