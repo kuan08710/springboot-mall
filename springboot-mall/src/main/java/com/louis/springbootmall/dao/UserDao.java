@@ -4,7 +4,9 @@ import com.louis.springbootmall.dto.UserRegisterRequest;
 import com.louis.springbootmall.model.User;
 
 public interface UserDao {
-    Integer register(UserRegisterRequest userRegisterRequest);
+    Integer createUser(UserRegisterRequest userRegisterRequest);
 
     User getUserById(Integer userId);
+
+    User getUserByEmail(String email);
 }
