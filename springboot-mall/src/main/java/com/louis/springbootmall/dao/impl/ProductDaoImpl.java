@@ -31,7 +31,7 @@ public class ProductDaoImpl implements ProductDao {
         Map<String, Object> map = new HashMap<>();
 
         // 查詢條件
-        addFilteringSql (sql , map , productQueryParams);
+        sql = addFilteringSql(sql , map , productQueryParams);
 
         // 排序
         sql += " ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
@@ -53,7 +53,7 @@ public class ProductDaoImpl implements ProductDao {
         Map<String, Object> map = new HashMap<>();
 
         // 查詢條件
-        addFilteringSql (sql , map , productQueryParams);
+        sql = addFilteringSql(sql , map , productQueryParams);
 
         Integer total = namedParameterJdbcTemplate.queryForObject(sql , map , Integer.class);
 
@@ -79,10 +79,10 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Integer createProduct (ProductRequest productRequest) {
-        String sql = " INSERT INTO product ( " + " product_name, category, image_url, price  " +
-                     " , stock, description, created_date, last_modified_date " + " ) VALUES ( " +
-                     " :prductName, :category, :imageUrl, :price, :stock, :description, :createData, :lastModifiedDate" +
-                     " ) ";
+        String sql = " INSERT INTO product ( " + " product_name, category, image_url, price, stock  " +
+                     " , description, created_date, last_modified_date " + " ) VALUES ( " +
+                     " :prductName, :category, :imageUrl, :price, :stock " +
+                     ", :description, :createData, :lastModifiedDate " + " ) ";
         Map<String, Object> map = new HashMap<>();
         map.put("prductName" , productRequest.getProductName());
         map.put("category" , productRequest.getCategory().toString());
